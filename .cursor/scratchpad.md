@@ -60,5 +60,6 @@ Suggested next steps:
 
 ## Lessons
 - Read files before editing. Capture full error output for reproducibility. Run `npm audit` if vulnerabilities appear.
- - Vite 6 build works; ensure avoiding deprecated CJS Node API usage in custom scripts.
+- Vite 6 build works; ensure avoiding deprecated CJS Node API usage in custom scripts.
+- Centralize icon imports to reduce bundle size and make it easier to track which icons are actually used.
 

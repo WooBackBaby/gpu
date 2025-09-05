@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Twitter, Play, Pause } from "lucide-react";
+import { Twitter, Play, Pause } from "./ui/icons";
 // @ts-ignore - Using image imports
 import titleImage from "../assets/titletext.png";  
 // @ts-ignore - Using image imports
