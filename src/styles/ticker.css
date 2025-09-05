@@ -1,0 +1,67 @@
+/* Ticker animation styles */
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.ticker-column-scroll {
+  animation: ticker-scroll 120s linear infinite;
+  will-change: transform;
+  height: 200%;
+}
+
+/* Pause animation on hover for better accessibility */
+.ticker-column-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Ticker text styling to match Figma design */
+.ticker-text {
+  font-family: 'Arial', sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #00FF00;
+  opacity: 0.6;
+  white-space: nowrap;
+  padding: 8px 4px;
+  line-height: 1.2;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 2px rgba(0, 255, 0, 0.3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive text sizes */
+@media (max-width: 640px) {
+  .ticker-text {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .ticker-text {
+    font-size: px;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ticker-text {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .ticker-text {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+  }
+}

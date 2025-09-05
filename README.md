@@ -1,7 +1,7 @@
 
-  # Responsive Website Design
+  # GPU ON SOL
 
-  This is a code bundle for Responsive Website Design. The original project is available at https://www.figma.com/design/ynGaIhbVkOkPXSFjYi7SGW/Responsive-Website-Design.
+  
 
   ## Running the code
 

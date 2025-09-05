@@ -8,6 +8,8 @@ import characterMia from "../assets/mia.png";
 import characterSia from "../assets/sia.png";
 // @ts-ignore - Using image imports
 import characterGia from "../assets/gia.png";
+// @ts-ignore - Using audio imports
+import uwuSound from "../assets/UwU - SOUND EFFECT.mp3";
 
 function GPUSiteNew() {
   const contractAddress = "95roms6D7e48BHz66JzZLG3ZggnJqsXRcWZVh4aLpump";
@@ -19,6 +21,9 @@ function GPUSiteNew() {
   
   const copyToClipboard = async () => {
     const textToCopy = inputRef.current?.value || contractAddress;
+    
+    // Play button click sound
+    playSound(uwuSound, 0.35);
     
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -55,38 +60,67 @@ function GPUSiteNew() {
   };
 
   const buyGPU = () => {
+    // Play button click sound
+    playSound(uwuSound, 0.35);
+    
+    // Open purchase page
     window.open('https://pump.fun/coin/95roms6D7e48BHz66JzZLG3ZggnJqsXRcWZVh4aLpump', '_blank');
   };
 
   const openTwitter = () => {
+    // Play button click sound
+    playSound(uwuSound, 0.35);
+    
+    // Open Twitter in a new tab
     window.open('https://twitter.com', '_blank');
   };
 
-  const playHoverSound = () => {
-    // IMPORTANT: Audio hosting options that WON'T work:
-    // ❌ YouTube links (CORS restrictions)
-    // ❌ Google Drive links (CORS + authentication issues)
-    // ❌ Most cloud storage direct links
-    
-    // ✅ WORKING audio hosting options:
-    // 1. Local files in /public/sounds/ folder (recommended)
-    // 2. CDN services like Cloudinary, AWS S3 with public access
-    // 3. GitHub raw file links (for small files)
-    // 4. Netlify/Vercel static file hosting
-    
-    // To implement:
-    // 1. Download audio from YouTube video: https://www.youtube.com/watch?v=PqIMNE7QBSQ
-    // 2. Convert to web format (mp3/ogg/wav)
-    // 3. Place in /public/sounds/character-hover.mp3
-    // 4. Update audio src to "/sounds/character-hover.mp3"
-    
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0; // Reset to start
-      audioRef.current.play().catch(e => {
-        console.log('Audio play failed:', e);
-        // Fallback: You could show a visual effect instead
-      });
+  // Utility function to play sound effects
+  const playSound = (soundPath: string = uwuSound, volume: number = 0.35) => {
+    try {
+      // Create a new Audio element for reliable playback
+      const audio = new Audio(soundPath);
+      audio.volume = volume;
+      
+      // Play the sound with promise handling
+      const playPromise = audio.play();
+      
+      // Handle play promise (required for modern browsers)
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.error('Audio play failed:', error);
+          
+          // Try fallback with audio ref if available
+          if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play().catch(e => {
+              console.log('Fallback audio play failed:', e);
+            });
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Audio playback error:', error);
     }
+  };
+
+  const handleCharacterClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    // Get the clicked element and its child div that displays the image
+    const target = event.currentTarget;
+    const imageDiv = target.querySelector('div');
+    
+    if (imageDiv) {
+      // Add the animation class
+      imageDiv.classList.add('active-wiggle');
+      
+      // Remove the class after animation completes
+      setTimeout(() => {
+        imageDiv.classList.remove('active-wiggle');
+      }, 500); // Match the animation duration (0.5s)
+    }
+    
+    // Play the UwU sound effect
+    playSound(uwuSound, 0.35);
   };
 
   const togglePlayPause = () => {
@@ -137,8 +171,8 @@ function GPUSiteNew() {
     };
   }, []);
 
-  const tickerText = "NVIDIA INDEX 6900 ▲ +6900.00";
-  const columns = 5;
+  const tickerText = "NVIDIA INDEX 6900 ▲ +6900.00 ";
+  const columns = 6;
   
   return (
     <div className="bg-black min-h-screen relative overflow-hidden">
@@ -183,8 +217,8 @@ function GPUSiteNew() {
         {/* <source src="/sounds/character-hover.mp3" type="audio/mpeg" /> */}
         {/* <source src="/sounds/character-hover.ogg" type="audio/ogg" /> */}
         
-        {/* Using the UwU sound effect from assets */}
-        <source src="../assets/UwU - SOUND EFFECT.mp3" type="audio/mpeg" />
+        {/* Using the UwU sound effect from public folder */}
+        <source src={uwuSound} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
       
@@ -214,12 +248,12 @@ function GPUSiteNew() {
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         {Array.from({ length: columns }, (_, columnIndex) => {
           const alignmentClass = columnIndex % 3 === 0 ? 'text-left' : columnIndex % 3 === 1 ? 'text-center' : 'text-right';
-          const totalItems = 60;
+          const totalItems = 20;
           
           return (
             <div 
               key={`ticker-column-${columnIndex}`}
-              className="absolute top-0 h-full px-2 overflow-hidden"
+              className="ticker-column absolute top-0 h-full px-2 overflow-hidden"
               style={{ 
                 left: `${(columnIndex * 100) / columns}%`,
                 width: `${100 / columns}%`
@@ -229,15 +263,16 @@ function GPUSiteNew() {
                 {Array.from({ length: totalItems }, (_, i) => (
                   <div 
                     key={`ticker-${columnIndex}-${i}`} 
-                    className={`font-['Arial:Italic',_sans-serif] text-[10px] sm:text-[12px] md:text-[16px] lg:text-[20px] text-[rgba(48,143,48,0.4)] tracking-[1px] sm:tracking-[1.5px] md:tracking-[2.5px] uppercase whitespace-nowrap ${alignmentClass} py-3 leading-relaxed`}
+                    className={`ticker-text ${alignmentClass}`}
                   >
                     {tickerText}
                   </div>
                 ))}
+                {/* Duplicate items for seamless looping */}
                 {Array.from({ length: totalItems }, (_, i) => (
                   <div 
                     key={`ticker-dup-${columnIndex}-${i}`} 
-                    className={`font-['Arial:Italic',_sans-serif] text-[10px] sm:text-[12px] md:text-[16px] lg:text-[20px] text-[rgba(48,143,48,0.4)] tracking-[1px] sm:tracking-[1.5px] md:tracking-[2.5px] uppercase whitespace-nowrap ${alignmentClass} py-3 leading-relaxed`}
+                    className={`ticker-text ${alignmentClass}`}
                   >
                     {tickerText}
                   </div>
@@ -313,38 +348,38 @@ function GPUSiteNew() {
       </div>
       
       {/* Character Images - Scaled Down and Bottom Aligned */}
-      <div className="absolute bottom-0 left-0 right-0 h-[220px] z-[5]">
+      <div className="absolute bottom-0 left-0 right-0 h-[220px] z-20">
         {/* Left Character - Rotated */}
-        <div className="absolute bottom-0 left-0 w-[100px] h-[200px] cursor-pointer jiggle-on-hover" onMouseEnter={playHoverSound}>
-          <div className="flex-none rotate-[180deg] scale-y-[-100%] w-full h-full">
+        <div className="absolute bottom-0 left-0 w-[100px] h-[200px] clickable-character" onClick={handleCharacterClick}>
+          <div className="flex-none rotate-[180deg] scale-y-[-100%] w-full h-full pointer-events-none">
             <div 
-              className="bg-bottom bg-contain bg-no-repeat h-[200px] w-[100px] transition-transform duration-75 hover:scale-105" 
+              className="bg-bottom bg-contain bg-no-repeat h-[200px] w-[100px] pointer-events-none" 
               style={{ backgroundImage: `url('${characterMia}')` }} 
             />
           </div>
         </div>
         
         {/* Right Character */}
-        <div className="absolute bottom-0 right-0 w-[100px] h-[200px] cursor-pointer jiggle-on-hover" onMouseEnter={playHoverSound}>
+        <div className="absolute bottom-0 right-0 w-[100px] h-[200px] clickable-character" onClick={handleCharacterClick}>
           <div 
-            className="bg-bottom bg-contain bg-no-repeat h-[200px] w-[100px] transition-transform duration-75 hover:scale-105" 
+            className="bg-bottom bg-contain bg-no-repeat h-[200px] w-[100px] pointer-events-none" 
             style={{ backgroundImage: `url('${characterMia}')` }} 
           />
         </div>
         
         {/* Middle Left Character */}
-        <div className="absolute bottom-0 left-[20%] sm:left-[25%] md:left-[30%] lg:left-[35%] w-[70px] h-[120px] hidden sm:block cursor-pointer jiggle-on-hover" onMouseEnter={playHoverSound}>
+        <div className="absolute bottom-0 left-[20%] sm:left-[25%] md:left-[30%] lg:left-[35%] w-[70px] h-[120px] hidden sm:block clickable-character" onClick={handleCharacterClick}>
           <div 
-            className="bg-bottom bg-contain bg-no-repeat h-[120px] w-[70px] transition-transform duration-75 hover:scale-105" 
-                          style={{ backgroundImage: `url('${characterSia}')` }}  
+            className="bg-bottom bg-contain bg-no-repeat h-[120px] w-[70px] pointer-events-none" 
+            style={{ backgroundImage: `url('${characterSia}')` }}  
           />
         </div>
         
         {/* Middle Right Character */}
-        <div className="absolute bottom-0 right-[20%] sm:right-[25%] md:right-[30%] lg:right-[35%] w-[82px] h-[120px] hidden sm:block cursor-pointer jiggle-on-hover" onMouseEnter={playHoverSound}>
+        <div className="absolute bottom-0 right-[20%] sm:right-[25%] md:right-[30%] lg:right-[35%] w-[82px] h-[120px] hidden sm:block clickable-character" onClick={handleCharacterClick}>
           <div 
-            className="bg-bottom bg-contain bg-no-repeat h-[120px] w-[82px] transition-transform duration-75 hover:scale-105" 
-                          style={{ backgroundImage: `url('${characterGia}')` }}  
+            className="bg-bottom bg-contain bg-no-repeat h-[120px] w-[82px] pointer-events-none" 
+            style={{ backgroundImage: `url('${characterGia}')` }}  
           />
         </div>
       </div>

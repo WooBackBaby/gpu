@@ -60,6 +60,11 @@ Suggested next steps:
 
 ## Lessons
 - Read files before editing. Capture full error output for reproducibility. Run `npm audit` if vulnerabilities appear.
-- Vite 6 build works; ensure avoiding deprecated CJS Node API usage in custom scripts.
+- Vite 6 requires ESM syntax: add "type": "module" to package.json and use proper ESM imports.
 - Centralize icon imports to reduce bundle size and make it easier to track which icons are actually used.
+- To fix Vite CJS deprecation warnings:
+  1. Add "type": "module" to package.json
+  2. Use node:path instead of path for imports in config files
+  3. Fix indentation and formatting in config files
+  4. Note: For Vite 6.3.5, do NOT use modulepreload-polyfill as it's not exported
 

@@ -59,5 +59,6 @@
         "build": "vite build",
         "typecheck": "tsc --noEmit",
         "find-unused": "npx depcheck"
-    }
+    },
+    "type": "module"
 }

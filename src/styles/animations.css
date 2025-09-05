@@ -1,0 +1,29 @@
+/* Animation styles for click effects */
+
+@keyframes wiggle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.wiggle-animation {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+/* Click effect class that will be added/removed via JS */
+.active-wiggle {
+  animation: wiggle 0.5s ease-in-out;
+  transform: scale(1.1);
+}
+
+/* Clickable elements styling */
+.clickable-character {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.clickable-character:active {
+  transform: scale(0.95);
+}
